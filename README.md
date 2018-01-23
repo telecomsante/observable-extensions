@@ -15,7 +15,7 @@ const {merge, reduce} = extensions(Observable);
 
 Each extension takes one or more Observable as its input and returns a new Observable.
 
-The library is currently tested with [zen-observable] but should work with any Observable implementation complying with the [Observable TC39 proposal].
+The library is currently tested with [zen-observable](https://github.com/zenparsing/zen-observable) but should work with any Observable implementation complying with the [Observable TC39 proposal].
 
 ## debounce: number => Observable => Observable
 
