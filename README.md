@@ -4,7 +4,7 @@ This package provides a few additional extensions to the upcoming [Observable TC
 
 In order to use this library, first get it with `npm install observable-extensions`.
 
-then use it this way:
+Then use it this way:
 
 ```js
 const extensions = require('observable-extensions');
