@@ -1,8 +1,21 @@
 # Observable extensions
 
-This package provides a few additional extensions to the upcoming [Observable TC39 proposal](https://github.com/tc39/proposal-observable).
+This package provides a few additional extensions to the upcoming [Observable TC39 proposal].
+
+In order to use this library, first get it with `npm install observable-extensions`.
+
+then use it this way:
+
+```js
+const extensions = require('observable-extensions');
+const Observable = require('zen-observable');
+
+const {merge, reduce} = extensions(Observable);
+```
 
 Each extension takes one or more Observable as its input and returns a new Observable.
+
+The library is currently tested with [zen-observable] but should work with any Observable implementation complying with the [Observable TC39 proposal].
 
 ## debounce: number => Observable => Observable
 
@@ -41,3 +54,5 @@ It returns a function able to reduce an Observable to a new Observable which wil
 
 This latter function takes an Observable as its input and returns a new Observable.
 This new Observable will emit regularly the last value emitted by the Observable in argument.
+
+[Observable TC39 proposal]: https://github.com/tc39/proposal-observable
