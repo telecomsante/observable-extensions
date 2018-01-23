@@ -1,0 +1,34 @@
+{
+  "name": "observable-extensions",
+  "version": "0.0.0",
+  "description": "Extensions to the upcoming native Observable",
+  "main": "index.js",
+  "scripts": {
+    "pretest": "eslint --ignore-path .gitignore .",
+    "test": "nyc ava",
+    "posttest": "nyc report --reporter=html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/telecomsante/observable-extensions.git"
+  },
+  "keywords": [
+    "observable",
+    "extensions"
+  ],
+  "author": "Telecom Sante",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/telecomsante/observable-extensions/issues"
+  },
+  "homepage": "https://github.com/telecomsante/observable-extensions#readme",
+  "devDependencies": {
+    "ava": "^0.24.0",
+    "eslint": "^4.16.0",
+    "eslint-plugin-fp": "^2.3.0",
+    "eslint-plugin-import": "^2.8.0",
+    "nyc": "^11.4.1",
+    "ramda": "^0.25.0",
+    "zen-observable": "^0.7.1"
+  }
+}
