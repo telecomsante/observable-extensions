@@ -55,4 +55,19 @@ It returns a function able to reduce an Observable to a new Observable which wil
 This latter function takes an Observable as its input and returns a new Observable.
 This new Observable will emit regularly the last value emitted by the Observable in argument.
 
+## then: boolean => Observable => Observable
+
+An Observable returned by `then` will emit:
+
+- the same value than the one emitted by the Observable in parameter if this value is not a [thenable];
+- the value resolved by a [thenable] emitted by the Observable in parameter.
+
+If the [thenable] is rejected, the new Observable will emit an error (and will thus stop emitting).
+
+The `then` extension has to be first configured by passing it a boolean parameter:
+
+- if this boolean is `true`, the new Observable will emit its values in the same order than the original Observable emits its values;
+- if this boolean is `false`, the new Observable will emit its values as soon as the underlying [thenable]s are fulfilled.
+
 [Observable TC39 proposal]: https://github.com/tc39/proposal-observable
+[thenable]: https://promisesaplus.com/#point-7
