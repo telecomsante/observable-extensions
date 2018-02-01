@@ -8,6 +8,8 @@ const keepPending = async promises => {
   return promises.filter((p, i) => pending[i]);
 };
 
+const observerBindings = observer => [observer.next.bind(observer), observer.error.bind(observer)];
+
 const debounce = Observable => ms => observable => new Observable(observer => {
   const debouncer = {};
   return observable.subscribe({
@@ -32,8 +34,7 @@ const last = Observable => observable => new Observable(observer => {
 });
 
 const merge = Observable => observables => new Observable(observer => {
-  const next = observer.next.bind(observer);
-  const error = observer.error.bind(observer);
+  const [next, error] = observerBindings(observer);
   const subscriptions = observables.map(observable => observable.subscribe({next, error}));
   const completeSubscriptions = observables.map(observable => observable.subscribe({
     complete: () => subscriptions.filter(s => !s.closed).length < 1 ? observer.complete() : observer
@@ -67,40 +68,43 @@ const repeat = Observable => ms => observable => new Observable(observer => {
   });
 });
 
-
-const then = Observable => {
-  const orderedThen = observable => new Observable(observer => {
-    const context = {last: Promise.resolve()};
+const thenAccumulatorFactory = order => order ? observer => {
+  const context = {last: Promise.resolve()};
+  return {
     // eslint-disable-next-line fp/no-mutation
-    const add = promise => context.last = promise;
-    return observable.subscribe({
-      next: value => typeof value.then === 'function'
-        ? add(context.last.then(() => value).then(observer.next.bind(observer), observer.error.bind(observer)))
-        : observer.next(value),
-      error: observer.error.bind(observer),
-      complete: () => context.last.then(observer.complete.bind(observer))
-    });
-  });
-
-  const unorderedThen = observable => new Observable(observer => {
-    const context = {promises: []};
-    const add = async promise => {
+    add: value => context.last = context.last
+      .then(() => value)
+      .then(...observerBindings(observer)),
+    last: () => context.last
+  };
+} : observer => {
+  const context = {promises: []};
+  return {
+    add: async value => {
+      const promise = value.then(...observerBindings(observer));
       const pending = keepPending(context.promises);
       // eslint-disable-next-line fp/no-mutation
       context.promises = [...context.promises, pending, promise];
       // eslint-disable-next-line fp/no-mutation
       return context.promises = [...await pending, promise];
-    };
+    },
+    last: () => Promise.all(context.promises)
+  };
+};
+
+const then = Observable => order => {
+  const newAccumulator = thenAccumulatorFactory(order);
+
+  return observable => new Observable(observer => {
+    const accumulator = newAccumulator(observer);
     return observable.subscribe({
       next: value => typeof value.then === 'function'
-        ? add(value.then(observer.next.bind(observer), observer.error.bind(observer)))
+        ? accumulator.add(value)
         : observer.next(value),
       error: observer.error.bind(observer),
-      complete: () => Promise.all(context.promises).then(observer.complete.bind(observer))
+      complete: () => accumulator.last().then(observer.complete.bind(observer))
     });
   });
-
-  return order => order ? orderedThen : unorderedThen;
 };
 
 const exported = {debounce, last, merge, reduce, repeat, then};
