@@ -1,6 +1,13 @@
 // All side effects are contained in Observable monads (at least I hope so)
 const sideEffects = () => true;
 
+const pendingMark = {};
+const isPending = promise => Promise.race([promise, Promise.resolve(pendingMark)]).then(v => v === pendingMark, () => false);
+const keepPending = async promises => {
+  const pending = await Promise.all(promises.map(isPending));
+  return promises.filter((p, i) => pending[i]);
+};
+
 const debounce = Observable => ms => observable => new Observable(observer => {
   const debouncer = {};
   return observable.subscribe({
@@ -60,8 +67,47 @@ const repeat = Observable => ms => observable => new Observable(observer => {
   });
 });
 
-const exported = {debounce, last, merge, reduce, repeat};
 
-module.exports = Observable => Object.entries(exported)
+const then = Observable => {
+  const orderedThen = observable => new Observable(observer => {
+    const context = {last: Promise.resolve()};
+    // eslint-disable-next-line fp/no-mutation
+    const add = promise => context.last = promise;
+    return observable.subscribe({
+      next: value => typeof value.then === 'function'
+        ? add(context.last.then(() => value).then(observer.next.bind(observer), observer.error.bind(observer)))
+        : observer.next(value),
+      error: observer.error.bind(observer),
+      complete: () => context.last.then(observer.complete.bind(observer))
+    });
+  });
+
+  const unorderedThen = observable => new Observable(observer => {
+    const context = {promises: []};
+    const add = async promise => {
+      const pending = keepPending(context.promises);
+      // eslint-disable-next-line fp/no-mutation
+      context.promises = [...context.promises, pending, promise];
+      // eslint-disable-next-line fp/no-mutation
+      return context.promises = [...await pending, promise];
+    };
+    return observable.subscribe({
+      next: value => typeof value.then === 'function'
+        ? add(value.then(observer.next.bind(observer), observer.error.bind(observer)))
+        : observer.next(value),
+      error: observer.error.bind(observer),
+      complete: () => Promise.all(context.promises).then(observer.complete.bind(observer))
+    });
+  });
+
+  return order => order ? orderedThen : unorderedThen;
+};
+
+const exported = {debounce, last, merge, reduce, repeat, then};
+
+const exportTest = test => exported => test ? {...exported, keepPending} : exported;
+
+module.exports = (Observable, test = false) => exportTest(test)(Object.entries(exported)
   .map(([name, func]) => [name, func(Observable)])
-  .reduce((object, [name, func]) => ({...object, [name]: func}), {});
+  .reduce((object, [name, func]) => ({...object, [name]: func}), {})
+);
