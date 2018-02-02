@@ -27,7 +27,7 @@ The debounced Observable will only emit the latest value emitted up to now by th
 
 `filter` relies on a `predicate` in order to decide which values of the original Observable have to be emitted by the returned Observable.
 
-`predicate` is a function with the following signature: `value => (true|false)`.
+`predicate` is a function with the following signature: `value => true|false`.
 If the predicate returns `true`, the `value` will be emitted by the new Observable.
 
 ## forEach: function => Observable => Promise
