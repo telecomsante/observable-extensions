@@ -15,7 +15,7 @@ const {merge, reduce} = extensions(Observable);
 
 Each extension takes one or more Observable as its input and returns a new Observable.
 
-The library is currently tested with [zen-observable](https://github.com/zenparsing/zen-observable) but should work with any Observable implementation complying with the [Observable TC39 proposal].
+The library is currently [tested with a custom Observable](./test/README.md) based on [zen-observable](https://github.com/zenparsing/zen-observable) but should work with any Observable implementation complying with the [Observable TC39 proposal].
 
 ## debounce: number => Observable => Observable
 
@@ -23,10 +23,34 @@ The library is currently tested with [zen-observable](https://github.com/zenpars
 
 The debounced Observable will only emit the latest value emitted up to now by the original Observable if no other value was emitted during the provided delay.
 
+## filter: predicate => Observable => Observable
+
+`filter` relies on a `predicate` in order to decide which values of the original Observable have to be emitted by the returned Observable.
+
+`predicate` is a function with the following signature: `value => (true|false)`.
+If the predicate returns `true`, the `value` will be emitted by the new Observable.
+
+## forEach: function => Observable => Promise
+
+`forEach` will apply `function` to each values emitted by the Observable.
+
+`forEach` returns a `Promise` that will:
+
+- either resolve to the first argument passed to [Observer.complete](https://github.com/tc39/proposal-observable#observer) which happens to be `undefined`;
+- or reject with the error emitted by the Observable.
+
 ## last: Observable => Observable
 
 The Observable returned by `last` will only emit the last value emitted by the original Observable.
 The original Observable has to complete in order for the new Observable to emit this latest value and also complete.
+
+## map: mapper => Observable => observable
+
+`map` relies on the `mapper` function to transform the values emitted by the original Observable into new values emitted by the returned Observable.
+
+`mapper` is a function with the following signature: `value => value`.
+
+> As for any `map` usually implemented, the types of the original value and the one of the new value can be different.
 
 ## merge: [Observable] => Observable
 
