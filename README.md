@@ -32,7 +32,7 @@ If the predicate returns `true`, the `value` will be emitted by the new Observab
 
 ## forEach: function => Observable => Promise
 
-`forEach` will apply `function` to each values emitted by the Observable.
+`forEach` will apply `function` to all values emitted by the Observable.
 
 `forEach` returns a `Promise` that will:
 
