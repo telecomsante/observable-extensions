@@ -9,7 +9,7 @@ The following graph displays the precedence between test files and not between t
 
 ![test dependencies](./dependencies.png)
 
-> Arrows should be interpreted as "rely on an feature tested by".
+> Arrows should be interpreted as "relies on a feature tested by".
 
 [Observable]: https://github.com/tc39/proposal-observable
 [zen-observable]: https://github.com/zenparsing/zen-observable
