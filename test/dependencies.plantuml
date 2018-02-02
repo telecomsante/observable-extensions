@@ -1,0 +1,61 @@
+@startuml
+
+usecase (Testing Observable)
+usecase (Timed Observable)
+usecase debounce
+usecase filter
+usecase forEach
+usecase last
+usecase map
+usecase merge
+usecase reduce
+usecase repeat
+usecase then
+
+(Testing Observable) <-down- (Timed Observable)
+(forEach) <-down- (Timed Observable)
+(map) <-down- (Timed Observable)
+(reduce) <-down- (Timed Observable)
+
+(Testing Observable) <-down- (debounce)
+(Timed Observable) <-down- (debounce)
+(forEach) <-down- (debounce)
+(last) <-down- (debounce)
+(reduce) <-down- (debounce)
+
+(Testing Observable) <-down- (filter)
+(forEach) <-down- (filter)
+(last) <-down- (filter)
+(reduce) <-down- (filter)
+
+(Testing Observable) <-down- (forEach)
+
+(Testing Observable) <-down- (last)
+(forEach) <-down- (last)
+
+(Testing Observable) <-down- (map)
+(forEach) <-down- (map)
+(last) <-down- (map)
+(reduce) <-down- (map)
+
+(Testing Observable) <-down- (merge)
+(Timed Observable) <-down- (merge)
+(forEach) <-down- (merge)
+(reduce) <-down- (merge)
+
+(Testing Observable) <-down- (reduce)
+(forEach) <-down- (reduce)
+
+(Testing Observable) <-down- (repeat)
+(Timed Observable) <-down- (repeat)
+(forEach) <-down- (repeat)
+(last) <-down- (repeat)
+(reduce) <-down- (repeat)
+
+(Testing Observable) <-down- (then)
+(Timed Observable) <-down- (then)
+(forEach) <-down- (then)
+(last) <-down- (then)
+(reduce) <-down- (then)
+
+@enduml

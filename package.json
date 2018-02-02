@@ -30,8 +30,10 @@
     "eslint": "^4.16.0",
     "eslint-plugin-fp": "^2.3.0",
     "eslint-plugin-import": "^2.8.0",
+    "is-observable": "^1.1.0",
     "nyc": "^11.4.1",
     "ramda": "^0.25.0",
+    "symbol-observable": "^1.2.0",
     "zen-observable": "^0.7.1"
   }
 }

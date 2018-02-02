@@ -23,6 +23,18 @@ const debounce = Observable => ms => observable => new Observable(observer => {
   });
 });
 
+const filter = Observable => predicate => observable => new Observable(observer => observable.subscribe({
+  next: value => predicate(value) ? observer.next(value) : value,
+  error: observer.error.bind(observer),
+  complete: observer.complete.bind(observer),
+}));
+
+const forEach = () => apply => observable => new Promise((resolve, reject) => observable.subscribe({
+  next: value => apply(value),
+  error: reject,
+  complete: resolve
+}));
+
 const last = Observable => observable => new Observable(observer => {
   const last = {};
   return observable.subscribe({
@@ -32,6 +44,12 @@ const last = Observable => observable => new Observable(observer => {
     complete: () => (last.hasOwnProperty('value') && observer.next(last.value) || true) && observer.complete()
   });
 });
+
+const map = Observable => mapper => observable => new Observable(observer => observable.subscribe({
+  next: value => observer.next(mapper(value)),
+  error: observer.error.bind(observer),
+  complete: observer.complete.bind(observer),
+}));
 
 const merge = Observable => observables => new Observable(observer => {
   const [next, error] = observerBindings(observer);
@@ -107,7 +125,7 @@ const then = Observable => order => {
   });
 };
 
-const exported = {debounce, last, merge, reduce, repeat, then};
+const exported = {debounce, filter, forEach, last, map, merge, reduce, repeat, then};
 
 const exportTest = test => exported => test ? {...exported, keepPending} : exported;
 

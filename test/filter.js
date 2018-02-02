@@ -3,46 +3,54 @@
 import test from 'ava';
 import {pipe} from 'ramda';
 import Observable from './helpers/observable';
-import timedObservable from './helpers/timed-observable';
 import extensions from '..';
 
-const {debounce, forEach, last, reduce} = extensions(Observable);
+const {filter, forEach, last, reduce} = extensions(Observable);
+const keepEven = filter(v => v % 2 === 0);
 
 test(t => {
   t.plan(1);
   return pipe(
-    debounce(10),
-    reduce((a, v) => [...a, v], []),
-    last,
-    forEach(r => t.deepEqual(r, []))
-  )(Observable.of());
+    keepEven,
+    forEach(() => t.fail())
+  )(Observable.of()).then(() => t.pass());
 });
 
 test(t => {
   t.plan(1);
   return pipe(
-    debounce(20),
+    keepEven,
     reduce((a, v) => [...a, v], []),
     last,
-    forEach(r => t.deepEqual(r, [3]))
-  )(timedObservable([[1, 10], [2, 20], [3, 30]]));
+    forEach(v => t.deepEqual(v, []))
+  )(Observable.of(1));
 });
 
 test(t => {
   t.plan(1);
   return pipe(
-    debounce(40),
+    keepEven,
     reduce((a, v) => [...a, v], []),
     last,
-    forEach(r => t.deepEqual(r, [3, 16]))
-  )(timedObservable([[1, 10], [2, 20], [3, 30], [15, 150], [16, 160]]));
+    forEach(v => t.deepEqual(v, [2]))
+  )(Observable.of(2));
+});
+
+test(t => {
+  t.plan(1);
+  return pipe(
+    keepEven,
+    reduce((a, v) => [...a, v], []),
+    last,
+    forEach(v => t.deepEqual(v, [2, 4]))
+  )(Observable.of(1, 2, 3, 4, 5));
 });
 
 test(t => {
   // error
   t.plan(1);
   return t.throws(pipe(
-    debounce(10),
+    keepEven,
     forEach(() => t.fail())
   )(new Observable(observer => observer.error(new Error('test')))), Error, 'test');
 });

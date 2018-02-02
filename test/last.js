@@ -1,42 +1,49 @@
 /* eslint-disable fp/no-unused-expression */
 
 import test from 'ava';
-import Observable from 'zen-observable';
+import {pipe} from 'ramda';
+import Observable from './helpers/observable';
 import extensions from '..';
 
-const {last} = extensions(Observable);
+const {forEach, last} = extensions(Observable);
 
 test(t => {
   t.plan(1);
-  return last(Observable.of())
-    .forEach(() => t.fail())
-    .then(() => t.pass());
+  return pipe(
+    last,
+    forEach(() => t.fail())
+  )(Observable.of()).then(() => t.pass());
 });
 
 test(t => {
   t.plan(1);
-  return last(Observable.of(1))
-    .reduce((a, v) => [...a, v], [])
-    .forEach(v => t.deepEqual(v, [1]));
+  return pipe(
+    last,
+    forEach(v => t.is(v, 1))
+  )(Observable.of(1));
 });
 
 test(t => {
   t.plan(1);
-  return last(Observable.of(1, 2))
-    .reduce((a, v) => [...a, v], [])
-    .forEach(v => t.deepEqual(v, [2]));
+  return pipe(
+    last,
+    forEach(v => t.is(v, 2))
+  )(Observable.of(1, 2));
 });
 
 test(t => {
   t.plan(1);
-  return last(Observable.of(1, 2, 3, 4, 5))
-    .reduce((a, v) => [...a, v], [])
-    .forEach(v => t.deepEqual(v, [5]));
+  return pipe(
+    last,
+    forEach(v => t.is(v, 5))
+  )(Observable.of(1, 2, 3, 4, 5));
 });
 
 test(t => {
   // error
   t.plan(1);
-  return t.throws(last(new Observable(observer => observer.error(new Error('test'))))
-    .forEach(() => t.fail()), Error, 'test');
+  return t.throws(pipe(
+    last,
+    forEach(() => t.fail())
+  )(new Observable(observer => observer.error(new Error('test')))), Error, 'test');
 });

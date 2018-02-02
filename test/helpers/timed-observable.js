@@ -1,4 +1,4 @@
-import Observable from 'zen-observable';
+import Observable from './observable';
 
 export default scenario => new Observable(observer => {
   const timeouts = scenario.map(s => setTimeout(() => s[0] instanceof Error ? observer.error(s[0]) : observer.next(s[0]), s[1]));
