@@ -29,6 +29,12 @@ const filter = Observable => predicate => observable => new Observable(observer 
   complete: observer.complete.bind(observer),
 }));
 
+const first = Observable => observable => new Observable(observer => observable.subscribe({
+  next: value => (observer.next(value) || true) && observer.complete(),
+  error: observer.error.bind(observer),
+  complete: observer.complete.bind(observer)
+}));
+
 const forEach = () => apply => observable => new Promise((resolve, reject) => observable.subscribe({
   next: value => apply(value),
   error: reject,
@@ -125,7 +131,7 @@ const then = Observable => order => {
   });
 };
 
-const exported = {debounce, filter, forEach, last, map, merge, reduce, repeat, then};
+const exported = {debounce, filter, first, forEach, last, map, merge, reduce, repeat, then};
 
 const exportTest = test => exported => test ? {...exported, keepPending} : exported;
 

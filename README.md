@@ -30,6 +30,10 @@ The debounced Observable will only emit the latest value emitted up to now by th
 `predicate` is a function with the following signature: `value => true|false`.
 If the predicate returns `true`, the `value` will be emitted by the new Observable.
 
+## first: Observable => Observable
+
+The Observable returned by `first` will only emit the first value emitted by the original Observable and will immediately complete.
+
 ## forEach: function => Observable => Promise
 
 `forEach` will apply `function` to all values emitted by the Observable.

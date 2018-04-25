@@ -3,6 +3,7 @@
 usecase (Testing Observable)
 usecase (Timed Observable)
 usecase debounce
+usecase first
 usecase filter
 usecase forEach
 usecase last
@@ -22,6 +23,9 @@ usecase then
 (forEach) <-down- (debounce)
 (last) <-down- (debounce)
 (reduce) <-down- (debounce)
+
+(Testing Observable) <-down- (first)
+(forEach) <-down- (first)
 
 (Testing Observable) <-down- (filter)
 (forEach) <-down- (filter)
