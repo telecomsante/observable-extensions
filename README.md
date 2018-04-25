@@ -44,7 +44,7 @@ If the predicate returns `true`, the `value` will be emitted by the new Observab
 The Observable returned by `last` will only emit the last value emitted by the original Observable.
 The original Observable has to complete in order for the new Observable to emit this latest value and also complete.
 
-## map: mapper => Observable => observable
+## map: mapper => Observable => Observable
 
 `map` relies on the `mapper` function to transform the values emitted by the original Observable into new values emitted by the returned Observable.
 
