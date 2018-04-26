@@ -35,8 +35,8 @@ const first = Observable => observable => new Observable(observer => observable.
   complete: observer.complete.bind(observer)
 }));
 
-const forEach = () => apply => observable => new Promise((resolve, reject) => observable.subscribe({
-  next: value => apply(value),
+const forEach = () => next => observable => new Promise((resolve, reject) => observable.subscribe({
+  next,
   error: reject,
   complete: resolve
 }));
