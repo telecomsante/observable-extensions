@@ -1,6 +1,6 @@
 # Observable extensions tests
 
-All extensions are tested with an [Observable] implentation based on [zen-observable].
+All extensions are tested with an [Observable] implementation based on [zen-observable].
 
 [zen-observable] is not directly used in order to guarantee that no extension is using any of the [zen-observable] additional features which are not part of the [Observable] proposal.
 
