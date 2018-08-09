@@ -1,6 +1,6 @@
 {
   "name": "observable-extensions",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Extensions to the upcoming native Observable",
   "main": "index.js",
   "scripts": {
