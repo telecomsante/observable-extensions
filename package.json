@@ -27,11 +27,11 @@
   "homepage": "https://github.com/telecomsante/observable-extensions#readme",
   "devDependencies": {
     "ava": "^0.25.0",
-    "eslint": "^4.19.1",
+    "eslint": "^5.3.0",
     "eslint-plugin-fp": "^2.3.0",
     "eslint-plugin-import": "^2.11.0",
     "is-observable": "^1.1.0",
-    "nyc": "^11.7.1",
+    "nyc": "^12.0.2",
     "ramda": "^0.25.0",
     "symbol-observable": "^1.2.0",
     "zen-observable": "^0.8.8"
