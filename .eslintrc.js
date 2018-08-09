@@ -14,11 +14,8 @@ module.exports = {
     "plugin:import/warnings"
   ],
   "parserOptions": {
-    "ecmaVersion": 8,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "experimentalObjectRestSpread": true
-    }
+    "ecmaVersion": 9,
+    "sourceType": "module"
   },
   "rules": {
     "indent": [
