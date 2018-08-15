@@ -69,7 +69,7 @@ The original Observable has to complete in order for the new Observable to emit 
 
 It returns a function able to reduce an Observable to a new Observable which will emit the updated accumulator each time the Observable in argument emits a value.
 
-> **Caution:** this is not the `reduce` you are searching for.
+> **Caution:** this is not the `reduce` you are looking for.
 > Reducing functions for Observables are usually implemented to produce a reduced value once the original Observable has completed.
 > The Observable produced by this function will emit a reduced value each time the original Observable emits a value.
 >
